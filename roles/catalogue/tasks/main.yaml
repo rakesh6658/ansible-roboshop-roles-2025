@@ -2,3 +2,7 @@
   import_role:
     name: common
     tasks_from: setup-nodejs.yaml
+- name: setting app directory
+  import_role:
+    name: common
+    tasks_from: setup-nodejs.yaml 
