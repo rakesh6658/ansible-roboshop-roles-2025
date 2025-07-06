@@ -6,3 +6,24 @@
   import_role:
     name: common
     tasks_from: setup-nodejs.yaml 
+- name: Change the working directory to app and install dependencies
+  ansible.builtin.shell: npm install
+  args:
+    chdir: /app    
+- name: setting systemd from common tasks
+  import_role:
+    name: common
+    tasks_from: setup-systemd.yaml    
+- name: copying mongo.repo
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: install mongod-client
+  ansible.builtin.yum:
+    name: mongodb-mongosh
+    state: present
+
+- name: loading schema
+  ansible.builtin.shell: mongosh --host mongodb.joindevops.store </app/db/master-data.js
+
