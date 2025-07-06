@@ -20,5 +20,26 @@
   import_role:
     name: common
     tasks_from: setup-systemd.yaml        
+- name: Install MySQL client
+  ansible.builtin.yum:
+    name: mysql
+    state: present
+
+- name: Load DB schema
+  ansible.builtin.shell: mysql -h mysql.joindevops.store -uroot -pRoboShop@1 < /app/db/schema.sql
+
+- name: Create app user
+  ansible.builtin.shell: mysql -h mysql.joindevops.store -uroot -pRoboShop@1 < /app/db/app-user.sql
+
+- name: Load master data
+  ansible.builtin.shell: mysql -h mysql.joindevops.store -uroot -pRoboShop@1 < /app/db/master-data.sql
+
+
+
+- name: Restart shipping
+  ansible.builtin.service:
+    name: shipping
+    state: restarted
+    
 
 
