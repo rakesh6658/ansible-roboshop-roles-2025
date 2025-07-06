@@ -1,0 +1,24 @@
+- name: Install Maven
+  ansible.builtin.yum:
+    name: maven
+    state: present
+- name: setting app directory
+  import_role:
+    name: common
+    tasks_from: setup-app.yaml    
+- name: Build shipping.jar using Maven
+  ansible.builtin.shell: mvn clean package
+  args:
+    chdir: /app
+  register: maven_result
+
+- name: Rename shipping-1.0.jar to shipping.jar
+  ansible.builtin.shell: mv target/shipping-1.0.jar shipping.jar
+  args:
+    chdir: /app
+- name: setting systemd from common tasks
+  import_role:
+    name: common
+    tasks_from: setup-systemd.yaml        
+
+
