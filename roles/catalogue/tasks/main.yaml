@@ -1,0 +1,4 @@
+- name: installing nodejs from common tasks
+  import_role:
+    name: common
+    tasks_from: setup-nodejs.yaml
